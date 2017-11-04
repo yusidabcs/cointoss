@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<title>Coin Toss</title>
+	<!-- Latest compiled and minified CSS -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<style type="text/css">
+		body {
+			margin: 10px;
+		  background: #fff;
+		  font-family: 'Ubuntu', sans-serif;
+		}
+		#coin {
+		   width: 80%;
+		   margin: auto;
+		}
+		#button {
+		  background:orange;
+		  color:#fff;
+		  padding:10px 15px;
+		  border-radius:2px;
+		  display:inline-block;
+		  transition:0.5s;
+		  cursor:pointer;
+		  &:hover {
+		    opacity:0.5;
+		  }
+		}
+
+
+		.animate-coin {
+		  animation: flip 2s 1;
+		}
+		@keyframes flip {
+		  0% {
+		    transform: scale3d(1,1,1) rotateX(0deg);
+		  }
+		  50% {
+		    transform: scale3d(1,1,1) rotateX(3600deg);
+		  }
+		  100% {
+		    transform: scale3d(1,1,1) rotateX(7200deg);
+		  }
+		}
+
+	</style>
+</head>
+<body>
+
+	<div id="app">
+
+		<div class="row">
+			<div class="col-md-4 col-md-offset-4">
+				<h1 class="text-center">Coin Toss</h1>
+				<hr>
+				<div class="row">
+					<div class="col-md-4 text-center">
+						<div id='coin'>
+							<img class="img img-responsive heads" v-bind:class="{ 'animate-coin': isRotate() }" v-bind:src="image"/>
+						</div>
+						<hr>
+
+						<button class='btn btn-success' @click="toss()" v-bind:disabled="reset">
+						  Flip coin
+						</button>
+						<button class="btn btn-warning" @click="resetMe()" v-bind:disabled="!reset">
+						  Reset
+						</button>
+					</div>
+					<div class="col-md-8">
+						<div class="form-group">
+						    <label for="exampleInputEmail1">Team Head</label>
+						    <input type="text" class="form-control" v-model="team1" placeholder="Team head">
+						  </div>
+						  <div class="form-group">
+						    <label for="exampleInputPassword1">Team Tail</label>
+						    <input type="text" class="form-control" v-model="team2" placeholder="Team tail">
+						  </div>
+
+						  <div class="alert alert-success" role="alert" v-bind:disable="!reset" v-if="emptyMessage()" v-html="message"></div>
+					</div>
+				</div>
+				
+
+			</div>
+		</div>
+	</div>
+
+	
+	
+	<div id='result'>
+
+	</div>
+	<div id='headsCounter'>
+
+	</div>
+	<div id='tailsCounter'>
+
+	</div>
+
+	<script src="https://unpkg.com/vue"></script>
+
+	<script type="text/javascript">
+		
+		var app = new Vue({
+			el: '#app',
+			data: {
+				message: 'Hello Vue!',
+				rotate: false,
+				image: 'https://en.numista.com/catalogue/photos/indonesie/g269.jpg',
+				team1: '',
+				team2: '',
+				message: '',
+				reset: false
+
+			},
+			methods: {
+				toss(){
+					if(this.team1 == '' || this.team2 == '')
+					{
+						alert('Silakan isi masing-masing team!');
+						return;
+					}
+					/* Random number 0 or 1  */
+					var x = Math.random();
+					this.rotate = true;
+					/* If statement */
+					console.log(x)
+					if (x <= 0.5) {
+						this.image = 'https://en.numista.com/catalogue/photos/indonesie/g269.jpg';
+
+        				var msg = 'Team Head Memang!<br>' + this.team1 + ' pilih side kamu sekarang!'
+						setTimeout( () => this.setMessage(msg), 2100)
+						
+					} else {
+						this.image = 'https://en.numista.com/catalogue/photos/indonesie/g265.jpg';
+						var msg = 'Team Tail Memang!<br>' + this.team2 + ' pilih side kamu sekarang!'
+						setTimeout( () => this.setMessage(msg), 2100)
+					}
+					this.reset = true;
+
+				},
+				isRotate(){
+					return this.rotate;
+				},
+				resetMe(){
+					this.rotate = false;
+					this.message == '';
+					this.reset = false
+				},
+				emptyMessage(){
+					return this.message !== '';
+				},
+				setMessage(msg){
+					this.message = msg;
+				},
+			}
+		});
+	</script>
+</body>
+</html>
